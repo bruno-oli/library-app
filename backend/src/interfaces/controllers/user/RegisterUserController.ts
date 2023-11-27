@@ -1,7 +1,7 @@
 import { RegisterUserUseCase } from '@/application/usecases/user/RegisterUserUseCase'
 import { CustomError } from '@/domain/errors/CustomError'
 import { Request, Response } from 'express'
-import { registerUserSchema } from '../validation/schemas/user/registerUserSchema'
+import { registerUserSchema } from '../../validation/schemas/user/registerUserSchema'
 
 class RegisterUserController {
   private readonly registerUserUseCase: RegisterUserUseCase

@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import 'dotenv/config'
-import { userRoutes } from './interfaces/routes/user'
+import { routes } from './interfaces/routes'
 
 const app = express()
 
@@ -14,6 +14,6 @@ app.use(
 )
 
 // Routes
-app.use(userRoutes)
+app.use(routes)
 
 export { app }

@@ -1,6 +1,6 @@
 import { LoginUserUseCase } from '@/application/usecases/user/LoginUserUseCase'
 import { Request, Response } from 'express'
-import { loginUserSchema } from '../validation/schemas/user/loginUserSchema'
+import { loginUserSchema } from '../../validation/schemas/user/loginUserSchema'
 import { CustomError } from '@/domain/errors/CustomError'
 
 class LoginUserController {

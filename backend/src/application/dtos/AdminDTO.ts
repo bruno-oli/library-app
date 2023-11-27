@@ -6,3 +6,8 @@ export interface AdminDTO {
 export interface CreateAdminDTO extends AdminDTO {
   password: string
 }
+
+export interface AuthAdminDTO extends AdminDTO {
+  id: string
+  iat: number
+}

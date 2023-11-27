@@ -1,6 +1,6 @@
 import { AuthUserUseCase } from '@/application/usecases/user/AuthUserUseCase'
 import { Request, Response } from 'express'
-import { authUserSchema } from '../validation/schemas/user/authUserSchema'
+import { authUserSchema } from '../../validation/schemas/user/authUserSchema'
 import { CustomError } from '@/domain/errors/CustomError'
 
 class AuthUserController {
