@@ -11,7 +11,7 @@ class AuthUserMiddleware {
   }
 
   async handle(req: Request, res: Response, next: NextFunction) {
-    const token = req.headers.authorization
+    const [, token] = req.headers.authorization?.split(' ') || []
 
     if (!token) {
       return res.status(401).json({ error: 'Unauthorized' })
