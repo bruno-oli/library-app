@@ -1,10 +1,11 @@
 import { CreateUserDTO } from '@/application/dtos/UserDTO'
 import { CustomError } from '@/domain/errors/CustomError'
+import { UserRepository } from '@/domain/repositories/UserRepository'
 import { UserDatabaseRepository } from '@/infrastructure/persistence/UserDatabaseRepository'
 import bcrypt from 'bcrypt'
 
 class RegisterUserUseCase {
-  private readonly userRespository: UserDatabaseRepository
+  private readonly userRespository: UserRepository
 
   constructor(userRespository: UserDatabaseRepository) {
     this.userRespository = userRespository

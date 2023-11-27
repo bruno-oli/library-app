@@ -1,10 +1,11 @@
 import { CustomError } from '@/domain/errors/CustomError'
+import { UserRepository } from '@/domain/repositories/UserRepository'
 import { UserDatabaseRepository } from '@/infrastructure/persistence/UserDatabaseRepository'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 class LoginUserUseCase {
-  private readonly userRepository: UserDatabaseRepository
+  private readonly userRepository: UserRepository
 
   constructor(userRepository: UserDatabaseRepository) {
     this.userRepository = userRepository
