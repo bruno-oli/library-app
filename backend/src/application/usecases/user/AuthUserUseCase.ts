@@ -22,7 +22,14 @@ class AuthUserUseCase {
         throw new CustomError('Invalid credentials', 401)
       }
 
-      return { decoded }
+      return {
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          iat: decoded.iat,
+        },
+      }
     } catch (error) {
       throw new CustomError('Invalid credentials', 401)
     }
