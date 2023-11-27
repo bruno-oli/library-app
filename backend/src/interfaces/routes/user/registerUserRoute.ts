@@ -9,6 +9,6 @@ const userDatabaseRepository = new UserDatabaseRepository()
 const registerUserUseCase = new RegisterUserUseCase(userDatabaseRepository)
 const registerUserController = new RegisterUserController(registerUserUseCase)
 
-registerUserRoute.post("/users", registerUserController.handle)
+registerUserRoute.post("/register", registerUserController.handle)
 
 export { registerUserRoute }
