@@ -1,7 +1,7 @@
-import { LoginUserUseCase } from "@/application/usecases/user/LoginUserUseCase";
-import { Request, Response } from "express";
-import { loginUserSchema } from "../validation/schemas/user/loginUserSchema";
-import { CustomError } from "@/domain/errors/CustomError";
+import { LoginUserUseCase } from '@/application/usecases/user/LoginUserUseCase'
+import { Request, Response } from 'express'
+import { loginUserSchema } from '../validation/schemas/user/loginUserSchema'
+import { CustomError } from '@/domain/errors/CustomError'
 
 class LoginUserController {
   private readonly loginUserUseCase: LoginUserUseCase
@@ -16,7 +16,7 @@ class LoginUserController {
     const validateRequestBody = loginUserSchema.safeParse({ email, password })
 
     if (!validateRequestBody.success) {
-      return res.status(400).json({ error: "Invalid request body" })
+      return res.status(400).json({ error: 'Invalid request body' })
     }
 
     try {
@@ -28,7 +28,7 @@ class LoginUserController {
         return res.status(error.statusCode).json({ error: error.message })
       }
 
-      return res.status(500).json({ error: "Internal server error" })
+      return res.status(500).json({ error: 'Internal server error' })
     }
   }
 }

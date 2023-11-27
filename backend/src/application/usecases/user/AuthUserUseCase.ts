@@ -1,7 +1,7 @@
-import { AuthUserDTO } from "@/application/dtos/UserDTO"
-import { CustomError } from "@/domain/errors/CustomError"
-import { UserDatabaseRepository } from "@/infrastructure/persistence/UserDatabaseRepository"
-import jwt from "jsonwebtoken"
+import { AuthUserDTO } from '@/application/dtos/UserDTO'
+import { CustomError } from '@/domain/errors/CustomError'
+import { UserDatabaseRepository } from '@/infrastructure/persistence/UserDatabaseRepository'
+import jwt from 'jsonwebtoken'
 
 class AuthUserUseCase {
   private readonly userRepository: UserDatabaseRepository
@@ -18,12 +18,12 @@ class AuthUserUseCase {
       const user = await this.userRepository.findById(decoded.id)
 
       if (!user) {
-        throw new CustomError("Invalid credentials", 401)
+        throw new CustomError('Invalid credentials', 401)
       }
 
       return { decoded }
     } catch (error) {
-      throw new CustomError("Invalid credentials", 401)
+      throw new CustomError('Invalid credentials', 401)
     }
   }
 }

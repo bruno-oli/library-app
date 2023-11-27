@@ -1,5 +1,5 @@
-import { Admin } from "../entities/Admin"
-import { AdminDTO, CreateAdminDTO } from "@/application/dtos/AdminDTO"
+import { Admin } from '../entities/Admin'
+import { AdminDTO, CreateAdminDTO } from '@/application/dtos/AdminDTO'
 
 export interface AdminRepository {
   create(admin: CreateAdminDTO): Promise<void>

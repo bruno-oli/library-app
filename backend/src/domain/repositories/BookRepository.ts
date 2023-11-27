@@ -1,5 +1,5 @@
-import { BookDTO } from "@/application/dtos/BookDTO"
-import { Book } from "../entities/Book"
+import { BookDTO } from '@/application/dtos/BookDTO'
+import { Book } from '../entities/Book'
 
 export interface BookRepository {
   create(book: BookDTO): Promise<void>

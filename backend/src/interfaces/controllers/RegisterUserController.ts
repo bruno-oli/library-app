@@ -1,7 +1,7 @@
-import { RegisterUserUseCase } from "@/application/usecases/user/RegisterUserUseCase";
-import { CustomError } from "@/domain/errors/CustomError";
-import { Request, Response } from "express";
-import { registerUserSchema } from "../validation/schemas/user/registerUserSchema";
+import { RegisterUserUseCase } from '@/application/usecases/user/RegisterUserUseCase'
+import { CustomError } from '@/domain/errors/CustomError'
+import { Request, Response } from 'express'
+import { registerUserSchema } from '../validation/schemas/user/registerUserSchema'
 
 class RegisterUserController {
   private readonly registerUserUseCase: RegisterUserUseCase
@@ -18,7 +18,7 @@ class RegisterUserController {
     const validateUser = registerUserSchema.safeParse(user)
 
     if (!validateUser.success) {
-      return res.status(400).json({ error: "Invalid request body" })
+      return res.status(400).json({ error: 'Invalid request body' })
     }
 
     try {
@@ -30,7 +30,7 @@ class RegisterUserController {
         return res.status(error.statusCode).json({ error: error.message })
       }
 
-      return res.status(500).json({ error: "Internal server error" })
+      return res.status(500).json({ error: 'Internal server error' })
     }
   }
 }

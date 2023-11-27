@@ -1,7 +1,7 @@
-import { z } from "zod";
+import { z } from 'zod'
 
 const authUserSchema = z.object({
-  token: z.string()
+  token: z.string(),
 })
 
 export { authUserSchema }

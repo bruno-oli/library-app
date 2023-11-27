@@ -1,7 +1,7 @@
-import { AuthUserUseCase } from "@/application/usecases/user/AuthUserUseCase"
-import { Request, Response } from "express"
-import { authUserSchema } from "../validation/schemas/user/authUserSchema"
-import { CustomError } from "@/domain/errors/CustomError"
+import { AuthUserUseCase } from '@/application/usecases/user/AuthUserUseCase'
+import { Request, Response } from 'express'
+import { authUserSchema } from '../validation/schemas/user/authUserSchema'
+import { CustomError } from '@/domain/errors/CustomError'
 
 class AuthUserController {
   private readonly authUserUseCase: AuthUserUseCase
@@ -16,7 +16,7 @@ class AuthUserController {
     const validateRequestBody = authUserSchema.safeParse({ token })
 
     if (!validateRequestBody.success) {
-      return res.status(400).json({ error: "Invalid request body" })
+      return res.status(400).json({ error: 'Invalid request body' })
     }
 
     try {
@@ -28,7 +28,7 @@ class AuthUserController {
         return res.status(error.statusCode).json({ error: error.message })
       }
 
-      return res.status(500).json({ error: "Internal server error" })
+      return res.status(500).json({ error: 'Internal server error' })
     }
   }
 }
