@@ -1,6 +1,7 @@
 import { BookDTO } from '@/application/dtos/BookDTO'
 import { BookRepository } from '@/domain/repositories/BookRepository'
 import { prisma } from '../PrismaInstance'
+import { Book } from '@/domain/entities/Book'
 
 class BookDatabaseRepository implements BookRepository {
   async create(book: BookDTO) {
@@ -9,16 +10,19 @@ class BookDatabaseRepository implements BookRepository {
     })
   }
 
+  async findAll(params?: Partial<Book>) {
+    return await prisma.book.findMany({
+      where: {
+        ...params,
+      },
+      orderBy: {
+        price_in_cents: 'asc',
+      },
+    })
+  }
+
   async findById(id: string) {
     return await prisma.book.findUnique({ where: { id } })
-  }
-
-  async findByName(name: string) {
-    return await prisma.book.findMany({ where: { name } })
-  }
-
-  async findByAuthor(author: string) {
-    return await prisma.book.findMany({ where: { author } })
   }
 
   async update(id: string, book: Partial<BookDTO>) {

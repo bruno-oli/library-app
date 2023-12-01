@@ -1,12 +1,10 @@
-import { Decimal } from '@prisma/client/runtime/library'
-
 export interface Book {
   id: string
   name: string
   description: string
   image: string
   stock: number
-  price: Decimal
+  price_in_cents: number
   author: string
   createdAt: Date
   updatedAt: Date

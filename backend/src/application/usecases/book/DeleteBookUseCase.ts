@@ -18,7 +18,7 @@ class DeleteBookUseCase {
 
       await this.bookRepository.delete(id)
     } catch (error) {
-      throw new CustomError('Internal server error', 500)
+      throw new CustomError('Book not found', 404)
     }
   }
 }

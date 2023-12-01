@@ -1,7 +1,7 @@
 import { CustomError } from '@/domain/errors/CustomError'
 import { BookRepository } from '@/domain/repositories/BookRepository'
 
-class FindBookByIdUseCase {
+class GetBookByIdUseCase {
   private readonly bookRepository: BookRepository
 
   constructor(bookRepository: BookRepository) {
@@ -10,17 +10,21 @@ class FindBookByIdUseCase {
 
   async execute(id: string) {
     try {
-      const books = await this.bookRepository.findById(id)
+      const book = await this.bookRepository.findById(id)
 
-      if (!books) {
-        throw new CustomError('Any book was found', 404)
+      if (!book) {
+        throw new CustomError('Any book with this id was found', 404)
       }
 
-      return { books }
+      return book
     } catch (error) {
+      if (error instanceof CustomError) {
+        throw error
+      }
+
       throw new CustomError('Internal server error', 500)
     }
   }
 }
 
-export { FindBookByIdUseCase }
+export { GetBookByIdUseCase }

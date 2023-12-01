@@ -30,22 +30,22 @@ model Admin {
 }
 
 model Book {
-  id           String        @id @default(uuid())
-  name         String
-  description  String
-  image        String
-  stock        Int
-  price        Decimal
-  author       String
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  OrderProduct OrderProduct?
+  id             String        @id @default(uuid())
+  name           String
+  description    String
+  image          String
+  stock          Int
+  price_in_cents Int
+  author         String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  OrderProduct   OrderProduct?
 }
 
 model Order {
-  id     String  @id @default(uuid())
-  total  Decimal
-  status String
+  id             String @id @default(uuid())
+  total_in_cents Int
+  status         String
 
   user    User?  @relation(fields: [user_id], references: [id])
   user_id String @unique
@@ -65,8 +65,8 @@ model OrderProduct {
   product    Book   @relation(fields: [product_id], references: [id])
   product_id String @unique
 
-  quantity  Int
-  price     Decimal
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  quantity       Int
+  price_in_cents Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
