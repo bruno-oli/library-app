@@ -25,7 +25,7 @@ class GetOrderByIdUseCase {
       const orderProducts =
         await this.orderProductRepository.findAllByOrderId(id)
 
-      return { ...order, orderProducts }
+      return { ...order, products: orderProducts }
     } catch (error) {
       if (error instanceof CustomError) {
         throw error
