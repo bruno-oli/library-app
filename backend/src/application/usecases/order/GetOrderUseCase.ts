@@ -2,7 +2,7 @@ import { CustomError } from '@/domain/errors/CustomError'
 import { OrderProductRepository } from '@/domain/repositories/OrderProductRepository'
 import { OrderRepository } from '@/domain/repositories/OrderRepository'
 
-class GetOrderUseCase {
+class GetOrderByIdUseCase {
   private readonly orderRepository: OrderRepository
   private readonly orderProductRepository: OrderProductRepository
 
@@ -25,10 +25,7 @@ class GetOrderUseCase {
       const orderProducts =
         await this.orderProductRepository.findAllByOrderId(id)
 
-      return {
-        order,
-        orderProducts,
-      }
+      return { ...order, orderProducts }
     } catch (error) {
       if (error instanceof CustomError) {
         throw error
@@ -39,4 +36,4 @@ class GetOrderUseCase {
   }
 }
 
-export { GetOrderUseCase }
+export { GetOrderByIdUseCase }
