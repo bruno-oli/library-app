@@ -1,8 +1,8 @@
 export interface Order {
   id: string
-  total: number
+  total_in_cents: number
   user_id: string
-  status: 'DRAFT' | 'IN_PROGRESS' | 'CANCELED' | 'DONE'
+  status: string
   createdAt: Date
   updatedAt: Date
 }

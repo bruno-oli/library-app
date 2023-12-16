@@ -10,7 +10,7 @@ class AuthUserMiddleware {
     this.userRepository = userRepository
   }
 
-  async handle(req: Request, res: Response, next: NextFunction) {
+  handle = async (req: Request, res: Response, next: NextFunction) => {
     const [, token] = req.headers.authorization?.split(' ') || []
 
     if (!token) {
