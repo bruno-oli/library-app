@@ -20,9 +20,9 @@ class AuthAdminController {
     }
 
     try {
-      const { admin } = await this.authAdminUseCase.execute(token)
+      const admin = await this.authAdminUseCase.execute(token)
 
-      return res.status(200).json({ admin })
+      return res.status(200).json(admin)
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message })

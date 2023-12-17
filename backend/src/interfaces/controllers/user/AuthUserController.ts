@@ -20,7 +20,7 @@ class AuthUserController {
     }
 
     try {
-      const { user } = await this.authUserUseCase.execute(token)
+      const user = await this.authUserUseCase.execute(token)
 
       return res.status(200).json({ user })
     } catch (error) {
