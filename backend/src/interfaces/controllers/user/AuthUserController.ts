@@ -22,7 +22,7 @@ class AuthUserController {
     try {
       const user = await this.authUserUseCase.execute(token)
 
-      return res.status(200).json({ user })
+      return res.status(200).json(user)
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({ error: error.message })
