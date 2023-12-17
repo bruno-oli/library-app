@@ -22,12 +22,10 @@ class AuthAdminUseCase {
       }
 
       return {
-        admin: {
-          id: admin.id,
-          name: admin.name,
-          email: admin.email,
-          iat: decoded.iat,
-        },
+        id: admin.id,
+        name: admin.name,
+        email: admin.email,
+        iat: decoded.iat,
       }
     } catch (error) {
       throw new CustomError('Invalid credentials', 401)
