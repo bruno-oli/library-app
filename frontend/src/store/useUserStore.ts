@@ -1,6 +1,6 @@
 import { api } from '@/lib/api'
 import { LoginSchema } from '@/schemas/login.schema'
-import { CustomError } from '@/utils/CustomError'
+import { RegisterSchema } from '@/schemas/register.schema'
 import { AxiosError } from 'axios'
 import { create } from 'zustand'
 
@@ -17,6 +17,7 @@ type UserStore = {
   setUser: (user: User) => void
   authUser: (token: string) => Promise<void>
   loginUser: (credentials: LoginSchema) => Promise<void>
+  registerUser: (credentials: RegisterSchema) => Promise<void>
 }
 
 const useUserStore = create<UserStore>((set, get) => {
@@ -41,10 +42,14 @@ const useUserStore = create<UserStore>((set, get) => {
           localStorage.setItem('token', data.token)
         })
         .catch((err: AxiosError) => {
-          throw new CustomError(
-            err.response?.statusText as string,
-            err.response?.status as number,
-          )
+          throw new Error(err.response?.statusText as string)
+        })
+    },
+    registerUser: async (credentials) => {
+      await api
+        .post('/user/register', credentials)
+        .catch((err: AxiosError<{ error: string }>) => {
+          throw new Error(err.response?.data.error)
         })
     },
   }

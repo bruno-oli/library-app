@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router-dom'
-import { User, useUserStore } from '@/store/useUserStore'
+import { useUserStore } from '@/store/useUserStore'
 import { useToast } from '@/components/ui/use-toast'
 
 const Login = () => {

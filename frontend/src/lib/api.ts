@@ -7,4 +7,15 @@ const api = axios.create({
   },
 })
 
+// Add a request interceptor
+api.interceptors.request.use(
+  (config) => {
+    const delay = 1000
+    return new Promise((resolve) => setTimeout(() => resolve(config), delay))
+  },
+  (error) => {
+    return Promise.reject(error)
+  },
+)
+
 export { api }
