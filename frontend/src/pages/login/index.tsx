@@ -5,31 +5,43 @@ import { Separator } from '@/components/ui/separator'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router-dom'
-import { useUserStore } from '@/store/useUserStore'
+import { loginUser } from '@/services/user-services'
 import { useToast } from '@/components/ui/use-toast'
+import { useState } from 'react'
+import { AxiosError } from 'axios'
 
 const Login = () => {
-  const { loginUser } = useUserStore()
-
   const navigate = useNavigate()
+
   const { toast } = useToast()
 
-  async function handleLogin(data: LoginSchema) {
-    try {
-      await loginUser(data)
+  const [isFetching, setIsFetching] = useState(false)
 
-      toast({
-        title: `Bem vindo de volta!`,
-        variant: 'default',
-      })
+  async function handleLogin(data: LoginSchema) {
+    setIsFetching(true)
+
+    try {
+      const token = (await loginUser(data)) as string
+
+      localStorage.setItem('token', token)
 
       navigate('/')
     } catch (error) {
+      if (error instanceof AxiosError) {
+        return toast({
+          description: error.response?.data.error,
+          title: 'Algo deu errado',
+          variant: 'destructive',
+        })
+      }
+
       toast({
-        title: 'Algo deu errado :(',
-        description: 'Email ou senha inválidos',
+        description: 'Erro interno no servidor, tente novamente mais tarde!',
+        title: 'Erro',
         variant: 'destructive',
       })
+    } finally {
+      setIsFetching(false)
     }
   }
 
@@ -68,7 +80,11 @@ const Login = () => {
           )}
         </div>
 
-        <Button type="submit" variant={'default'}>
+        <Button
+          type="submit"
+          variant={'default'}
+          disabled={!!(errors.email || errors.password || isFetching)}
+        >
           Entrar
         </Button>
 

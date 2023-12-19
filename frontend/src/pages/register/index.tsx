@@ -2,16 +2,16 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/components/ui/use-toast'
 import { RegisterSchema, registerSchema } from '@/schemas/register.schema'
-import { useUserStore } from '@/store/useUserStore'
+import { registerUser } from '@/services/user-services'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Separator } from '@radix-ui/react-separator'
-import { useState } from 'react'
+import { AxiosError } from 'axios'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
 const Register = () => {
   const navigate = useNavigate()
-  const { registerUser } = useUserStore()
+
   const { toast } = useToast()
 
   const {
@@ -22,36 +22,31 @@ const Register = () => {
     resolver: zodResolver(registerSchema),
   })
 
-  const [isFetching, setIsFetching] = useState<boolean>(false)
-
   async function handleRegister(data: RegisterSchema) {
     try {
-      setIsFetching(true)
-
       await registerUser(data)
 
       toast({
-        title: 'Cadastrado com sucesso',
-        description: 'Redirecionando para a pagina de login...',
+        description:
+          'Usuário criado com sucesso! Redirecionando para a página de login...',
+        title: 'Sucesso',
       })
 
       navigate('/login')
-    } catch (err) {
-      if (err instanceof Error) {
+    } catch (error) {
+      if (error instanceof AxiosError) {
         return toast({
-          variant: 'destructive',
+          description: error.response?.data.error,
           title: 'Algo deu errado',
-          description: err.message,
+          variant: 'destructive',
         })
       }
 
       toast({
-        variant: 'destructive',
+        description: 'Erro interno no servidor, tente novamente mais tarde!',
         title: 'Erro',
-        description: 'Algo deu errado',
+        variant: 'destructive',
       })
-    } finally {
-      setIsFetching(false)
     }
   }
 
@@ -104,7 +99,7 @@ const Register = () => {
           )}
         </div>
 
-        <Button type="submit" variant={'default'} disabled={isFetching}>
+        <Button type="submit" variant={'default'}>
           Cadastrar
         </Button>
 
