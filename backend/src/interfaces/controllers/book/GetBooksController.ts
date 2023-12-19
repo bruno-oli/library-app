@@ -12,8 +12,11 @@ class GetBooksController {
 
   handle = async (req: Request, res: Response) => {
     // eslint-disable-next-line
-    const { name, author, price_in_cents, image, stock, description } =
-      req.query
+    const { name, author, price_in_cents, image, stock, description, createdAt } = req.query
+
+    const { orderBy, order } = req.query
+
+    const { take, skip } = req.query
 
     const query = {
       name,
@@ -23,9 +26,16 @@ class GetBooksController {
       image,
       stock: stock ? Number(stock) : undefined,
       description,
+      createdAt,
     }
 
-    const validateQuery = getBooksSchema.safeParse(query)
+    const validateQuery = getBooksSchema.safeParse({
+      query: { ...query },
+      orderBy,
+      order,
+      take,
+      skip,
+    })
 
     if (!validateQuery.success) {
       return res.status(400).json({
@@ -34,7 +44,13 @@ class GetBooksController {
     }
 
     try {
-      const { books } = await this.getBooksUseCase.execute(validateQuery.data)
+      const { books } = await this.getBooksUseCase.execute(
+        validateQuery.data.query,
+        validateQuery.data.orderBy,
+        validateQuery.data.order,
+        validateQuery.data.take,
+        validateQuery.data.skip,
+      )
 
       return res.status(200).json(books)
     } catch (error) {

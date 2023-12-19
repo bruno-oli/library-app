@@ -3,6 +3,8 @@ import { BookRepository } from '@/domain/repositories/BookRepository'
 import { prisma } from '../PrismaInstance'
 import { Book } from '@/domain/entities/Book'
 
+export type BookOrderByFilter = keyof Book
+
 class BookDatabaseRepository implements BookRepository {
   async create(book: BookDTO) {
     await prisma.book.create({
@@ -10,13 +12,23 @@ class BookDatabaseRepository implements BookRepository {
     })
   }
 
-  async findAll(params?: Partial<Book>) {
+  async findAll(
+    params?: Partial<Book>,
+    orderBy?: BookOrderByFilter,
+    order?: 'asc' | 'desc',
+    take?: number,
+    skip?: number,
+  ) {
     return await prisma.book.findMany({
       where: {
         ...params,
       },
+
+      take,
+      skip,
+
       orderBy: {
-        price_in_cents: 'asc',
+        [`${orderBy}`]: order,
       },
     })
   }

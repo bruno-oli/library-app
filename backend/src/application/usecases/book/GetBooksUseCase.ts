@@ -1,6 +1,7 @@
 import { Book } from '@/domain/entities/Book'
 import { CustomError } from '@/domain/errors/CustomError'
 import { BookRepository } from '@/domain/repositories/BookRepository'
+import { BookOrderByFilter } from '@/infrastructure/persistence/BookDatabaseRepository'
 
 class GetBooksUseCase {
   private readonly bookRepository: BookRepository
@@ -9,9 +10,21 @@ class GetBooksUseCase {
     this.bookRepository = bookRepository
   }
 
-  async execute(params?: Partial<Book>) {
+  async execute(
+    params?: Partial<Book>,
+    orderBy: BookOrderByFilter = 'name',
+    order: 'asc' | 'desc' = 'asc',
+    take: number = 10,
+    skip: number = 0,
+  ) {
     try {
-      const books = await this.bookRepository.findAll(params)
+      const books = await this.bookRepository.findAll(
+        params,
+        orderBy,
+        order,
+        take,
+        skip,
+      )
 
       if (!books || !books.length) {
         throw new CustomError('Any book was found', 404)
