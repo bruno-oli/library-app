@@ -6,6 +6,7 @@ export interface Book {
   stock: number
   price_in_cents: number
   author: string
+  featured: boolean
   createdAt: Date
   updatedAt: Date
 }

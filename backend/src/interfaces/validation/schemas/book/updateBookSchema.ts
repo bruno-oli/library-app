@@ -8,35 +8,19 @@ const updateBookSchema = z
     stock: z.number().nonnegative(),
     price_in_cents: z.number().nonnegative(),
     author: z.string().min(2),
+    featured: z.boolean(),
   })
   .partial()
   .strict()
-  .superRefine(
-    // eslint-disable-next-line
-    ({ name, description, image, stock, price_in_cents, author }, ctx) => {
-      if (
-        !name &&
-        !description &&
-        !image &&
-        !stock &&
-        // eslint-disable-next-line
-        !price_in_cents &&
-        !author
-      ) {
-        ctx.addIssue({
-          code: 'custom',
-          message: 'At least one field must be updated',
-          path: [
-            'name',
-            'description',
-            'image',
-            'stock',
-            'price_in_cents',
-            'author',
-          ],
-        })
-      }
-    },
+  .refine(
+    (data) =>
+      data.name ||
+      data.description ||
+      data.image ||
+      data.stock ||
+      data.price_in_cents ||
+      data.author ||
+      data.featured,
   )
 
 export { updateBookSchema }

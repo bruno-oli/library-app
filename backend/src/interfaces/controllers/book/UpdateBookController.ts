@@ -18,7 +18,7 @@ class UpdateBookController {
     }
 
     // eslint-disable-next-line
-    const { name, description, image, stock, price_in_cents, author } = req.body
+    const { name, description, image, stock, price_in_cents, author, featured } = req.body
 
     const book = {
       name,
@@ -28,11 +28,14 @@ class UpdateBookController {
       // eslint-disable-next-line
       price_in_cents,
       author,
+      featured,
     }
 
     const validateBody = updateBookSchema.safeParse(book)
 
     if (!validateBody.success) {
+      console.log(validateBody.error)
+
       return res.status(400).json({ error: 'Invalid request body' })
     }
 

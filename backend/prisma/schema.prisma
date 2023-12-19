@@ -37,6 +37,7 @@ model Book {
   stock          Int
   price_in_cents Int
   author         String
+  featured       Boolean        @default(false)
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
   OrderProduct   OrderProduct[]

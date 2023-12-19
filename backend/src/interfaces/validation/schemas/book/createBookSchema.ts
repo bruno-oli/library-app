@@ -7,6 +7,7 @@ const createBookSchema = z.object({
   stock: z.number().nonnegative(),
   price_in_cents: z.number().nonnegative(),
   author: z.string().min(2),
+  featured: z.boolean().optional(),
 })
 
 export { createBookSchema }

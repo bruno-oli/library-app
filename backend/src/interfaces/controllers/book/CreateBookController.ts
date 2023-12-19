@@ -13,10 +13,10 @@ class CreateBookController {
 
   handle = async (req: Request, res: Response) => {
     // eslint-disable-next-line
-    const { name, description, image, stock, price_in_cents, author } = req.body
+    const { name, description, image, stock, price_in_cents, author, featured } = req.body
 
     // eslint-disable-next-line
-    const book = { name, description, image, stock, price_in_cents, author } as BookDTO
+    const book = { name, description, image, stock, price_in_cents, author, featured } as BookDTO
 
     const validateBody = createBookSchema.safeParse(book)
 

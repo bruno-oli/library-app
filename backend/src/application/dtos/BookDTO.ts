@@ -5,4 +5,5 @@ export interface BookDTO {
   stock: number
   price_in_cents: number
   author: string
+  featured: boolean
 }
