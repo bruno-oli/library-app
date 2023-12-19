@@ -5,6 +5,10 @@ import { Register } from './pages/register'
 import { Home } from './pages/home'
 import UserProtectedRoutes from './utils/UserProtectedRoutes'
 import { UserAuthRoutes } from './utils/UserAuthRoutes'
+import { AdminLogin } from './pages/admin-login'
+import { AdminDashboard } from './pages/admin-dashboard'
+import { AdminProtectedRoutes } from './utils/AdminProtectedRoutes'
+import { AdminAuthRoutes } from './utils/AdminAuthRoutes'
 
 function App() {
   return (
@@ -17,6 +21,14 @@ function App() {
 
         <Route element={<UserProtectedRoutes />}>
           <Route path="/" element={<Home />} />
+        </Route>
+
+        <Route element={<AdminAuthRoutes />}>
+          <Route path="/dashboard/login" element={<AdminLogin />} />
+        </Route>
+
+        <Route element={<AdminProtectedRoutes />}>
+          <Route path="/dashboard" element={<AdminDashboard />} />
         </Route>
       </Routes>
 
