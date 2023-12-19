@@ -1,6 +1,7 @@
 import { api } from '@/api/api'
 import { LoginResponse } from '@/api/types'
 import { AdminLoginSchema } from '@/schemas/admin-login.schema'
+import { Admin } from '@/store/admin-auth-store'
 
 async function loginAdmin(credentials: AdminLoginSchema) {
   const response = await api.post<LoginResponse>('/admin/login', credentials)
@@ -19,7 +20,7 @@ async function logoutAdmin() {
 }
 
 async function authAdmin(token: string) {
-  const response = await api.post('/admin/auth', { token })
+  const response = await api.post<Admin>('/admin/auth', { token })
 
   if (response.status !== 200) {
     return undefined

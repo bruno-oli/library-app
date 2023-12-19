@@ -20,7 +20,8 @@ const AdminProtectedRoutes = () => {
       const admin = await authAdmin(token as string)
 
       if (!admin) {
-        logoutAdmin()
+        setIsAdminAuthLoading(false)
+        return logoutAdmin()
       }
 
       setAdmin(admin)

@@ -6,7 +6,7 @@ import { Outlet } from 'react-router-dom'
 const UserProtectedRoutes = () => {
   const {
     state: { isAuthLoading },
-    actions: { setIsAuthLoading },
+    actions: { setIsAuthLoading, setUser },
   } = useAuthStore()
   useEffect(() => {
     async function checkAuth() {
@@ -19,14 +19,16 @@ const UserProtectedRoutes = () => {
       const user = await authUser(token as string)
 
       if (!user) {
-        logoutUser()
+        setIsAuthLoading(false)
+        return logoutUser()
       }
 
+      setUser(user)
       setIsAuthLoading(false)
     }
 
     checkAuth()
-  }, [setIsAuthLoading])
+  }, [setIsAuthLoading, setUser])
 
   if (isAuthLoading) {
     return <div>Loading...</div>
