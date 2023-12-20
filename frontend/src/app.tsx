@@ -9,8 +9,45 @@ import { AdminLogin } from './pages/admin-login'
 import { AdminDashboard } from './pages/admin-dashboard'
 import { AdminProtectedRoutes } from './utils/AdminProtectedRoutes'
 import { AdminAuthRoutes } from './utils/AdminAuthRoutes'
+import { useEffect } from 'react'
+import { useThemeStore } from './store/theme-store'
 
 function App() {
+  const {
+    actions: { setTheme },
+  } = useThemeStore()
+
+  useEffect(() => {
+    function setPreferredTheme() {
+      const root = window.document.documentElement
+      root.classList.remove('dark', 'light')
+
+      const theme = localStorage.getItem('theme')
+
+      if (
+        !theme ||
+        theme === 'system' ||
+        (theme !== 'light' && theme !== 'dark')
+      ) {
+        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
+          .matches
+          ? 'dark'
+          : 'light'
+
+        root.classList.add(systemTheme)
+
+        localStorage.setItem('theme', systemTheme)
+
+        return setTheme(systemTheme)
+      }
+
+      root.classList.add(theme)
+      setTheme(theme)
+    }
+
+    setPreferredTheme()
+  }, [setTheme])
+
   return (
     <BrowserRouter>
       <Routes>
@@ -28,7 +65,7 @@ function App() {
         </Route>
 
         <Route element={<AdminProtectedRoutes />}>
-          <Route path="/dashboard" element={<AdminDashboard />} />
+          <Route path="/dashboard/*" element={<AdminDashboard />} />
         </Route>
       </Routes>
 
