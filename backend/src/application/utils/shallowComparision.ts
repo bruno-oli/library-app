@@ -1,20 +1,22 @@
-function shallowComparison(
-  obj1: object,
-  obj2: object,
-  ignoredProperties: string[] = [],
+function shallowComparison<T extends object>(
+  obj1: T,
+  obj2: T,
+  ignoredProperties: Array<keyof T> = [],
 ) {
+  const keys1 = Object.keys(obj1) as Array<keyof T>
+  const keys2 = Object.keys(obj2) as Array<keyof T>
+
   return (
-    Object.keys(obj1).filter((key) => !ignoredProperties.includes(key))
-      .length ===
-      Object.keys(obj2).filter((key) => !ignoredProperties.includes(key))
-        .length &&
-    (Object.keys(obj1) as (keyof typeof obj1)[]).every((key) => {
-      if (ignoredProperties.includes(key)) {
+    keys1.filter((key) => !ignoredProperties.includes(key)).length ===
+      keys2.filter((key) => !ignoredProperties.includes(key)).length &&
+    keys1.every((key) => {
+      const typedKey = key as keyof T
+      if (ignoredProperties.includes(typedKey)) {
         return true
       }
       return (
-        Object.prototype.hasOwnProperty.call(obj2, key) &&
-        obj1[key] === obj2[key]
+        Object.prototype.hasOwnProperty.call(obj2, typedKey) &&
+        obj1[typedKey] === obj2[typedKey]
       )
     })
   )
