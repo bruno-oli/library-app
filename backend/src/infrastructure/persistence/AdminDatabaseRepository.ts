@@ -1,4 +1,7 @@
-import { CreateAdminDTO, AdminDTO } from '@/application/dtos/AdminDTO'
+import {
+  CreateAdminDTO,
+  DatabaseUpdateAdminDTO,
+} from '@/application/dtos/AdminDTO'
 import { AdminRepository } from '@/domain/repositories/AdminRepository'
 import { prisma } from '../PrismaInstance'
 
@@ -15,7 +18,7 @@ class AdminDatabaseRepository implements AdminRepository {
     return await prisma.admin.findUnique({ where: { id } })
   }
 
-  async update(id: string, admin: Partial<AdminDTO>) {
+  async update(id: string, admin: Partial<DatabaseUpdateAdminDTO>) {
     await prisma.admin.update({ where: { id }, data: admin })
   }
 

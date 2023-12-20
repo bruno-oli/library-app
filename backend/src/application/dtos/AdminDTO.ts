@@ -11,3 +11,12 @@ export interface AuthAdminDTO extends AdminDTO {
   id: string
   iat: number
 }
+
+export interface UpdateAdminDTO extends AdminDTO {
+  newPassword: string
+  currentPassword: string
+}
+
+export interface DatabaseUpdateAdminDTO extends AdminDTO {
+  password: string
+}
