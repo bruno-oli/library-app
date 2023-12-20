@@ -1,4 +1,4 @@
-import { logoutAdmin } from '@/services/admin-services'
+import { logoutAdmin, updateAdmin } from '@/services/admin-services'
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar'
 import { Label } from './ui/label'
 import {
@@ -21,6 +21,17 @@ import {
   SheetDescription,
 } from './ui/sheet'
 import { useAdminAuthStore } from '@/store/admin-auth-store'
+import {
+  UpdateAdminSchema,
+  updateAdminSchema,
+} from '@/schemas/update-admin.schema'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { AxiosError } from 'axios'
+import { useToast } from './ui/use-toast'
+import { useState } from 'react'
+import { shallowComparison } from '@/utils/shallowComparision'
+import { ToastAction } from './ui/toast'
 
 const AdminDropdown = () => {
   const {
@@ -28,8 +39,62 @@ const AdminDropdown = () => {
     // actions: { setAdmin },
   } = useAdminAuthStore()
 
+  const {
+    handleSubmit,
+    formState: { errors, dirtyFields },
+    register,
+  } = useForm<UpdateAdminSchema>({
+    resolver: zodResolver(updateAdminSchema),
+    defaultValues: {
+      name: admin?.name,
+      email: admin?.email,
+    },
+  })
+
+  const { toast } = useToast()
+
+  const [isFetching, setIsFetching] = useState(false)
+  const [sheetIsOpen, setSheetIsOpen] = useState(false)
+
+  async function handleUpdateAdmin(data: UpdateAdminSchema) {
+    setIsFetching(true)
+    try {
+      await updateAdmin(data)
+
+      toast({
+        description:
+          'Dados atualizados com sucesso! Recarregue a pagina para ver as alterações',
+        title: 'Sucesso',
+        action: (
+          <ToastAction
+            altText="Recarregar pagina"
+            onClick={() => window.location.reload()}
+          >
+            Recarregar pagina
+          </ToastAction>
+        ),
+      })
+
+      setSheetIsOpen(false)
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 304) {
+          return
+        }
+
+        return toast({
+          description: error.response?.data.error,
+          title: 'Algo deu errado',
+          variant: 'destructive',
+        })
+      }
+    } finally {
+      setIsFetching(false)
+    }
+  }
+
   return (
-    <Sheet>
+    <Sheet open={sheetIsOpen} onOpenChange={setSheetIsOpen}>
       <DropdownMenu>
         <DropdownMenuTrigger>
           <Avatar>
@@ -58,27 +123,37 @@ const AdminDropdown = () => {
       <SheetContent>
         <SheetHeader>
           <SheetTitle>Editar Dados</SheetTitle>
-          <SheetDescription>Edite suas informações</SheetDescription>
+          <SheetDescription>
+            Edite suas informações. Deixe em branco os campos que você não
+            deseja alterar
+          </SheetDescription>
         </SheetHeader>
-        <form className="mt-4 flex w-full flex-col gap-4">
+        <form
+          className="mt-4 flex w-full flex-col gap-4"
+          onSubmit={handleSubmit(handleUpdateAdmin)}
+        >
           <div className="space-y-2">
             <Label htmlFor="name">Nome</Label>
             <Input
-              value={admin?.name}
               placeholder="Nome"
               type="text"
               id="name"
+              {...register('name')}
             />
+
+            <p className="text-sm text-red-500">{errors.name?.message}</p>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
-              value={admin?.email}
               placeholder="Email"
               type="email"
               id="email"
+              {...register('email')}
             />
+
+            <p className="text-sm text-red-500">{errors.email?.message}</p>
           </div>
 
           <div className="space-y-2">
@@ -87,7 +162,12 @@ const AdminDropdown = () => {
               placeholder="Insira a sua senha atual"
               id="current-password"
               type="password"
+              {...register('currentPassword')}
             />
+
+            <p className="text-sm text-red-500">
+              {errors.currentPassword?.message}
+            </p>
           </div>
 
           <div className="space-y-2">
@@ -96,12 +176,35 @@ const AdminDropdown = () => {
               placeholder="Insira a sua senha nova"
               id="new-password"
               type="password"
+              {...register('newPassword')}
             />
+
+            <p className="text-sm text-red-500">
+              {errors.newPassword?.message}
+            </p>
           </div>
 
-          <SheetTrigger className="self-end">
-            <Button variant={'default'}>Salvar</Button>
-          </SheetTrigger>
+          <div className="space-y-2">
+            <Label htmlFor="new-password">Confirme a nova senha</Label>
+            <Input
+              placeholder="Insira a sua senha nova"
+              id="new-password"
+              type="password"
+              {...register('newPasswordConfirm')}
+            />
+
+            <p className="text-sm text-red-500">
+              {errors.newPasswordConfirm?.message}
+            </p>
+          </div>
+
+          <Button
+            variant={'default'}
+            type="submit"
+            disabled={isFetching || shallowComparison(dirtyFields, {})}
+          >
+            Salvar
+          </Button>
         </form>
       </SheetContent>
     </Sheet>
