@@ -33,8 +33,8 @@ class GetBooksController {
       query: { ...query },
       orderBy,
       order,
-      take,
-      skip,
+      take: take ? Number(take) : undefined,
+      skip: skip ? Number(skip) : undefined,
     })
 
     if (!validateQuery.success) {
