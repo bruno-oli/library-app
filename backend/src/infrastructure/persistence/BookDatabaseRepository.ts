@@ -19,7 +19,7 @@ class BookDatabaseRepository implements BookRepository {
     take?: number,
     skip?: number,
   ) {
-    return await prisma.book.findMany({
+    const books = await prisma.book.findMany({
       where: {
         ...params,
       },
@@ -31,6 +31,14 @@ class BookDatabaseRepository implements BookRepository {
         [`${orderBy}`]: order,
       },
     })
+
+    const count = await prisma.book.count({
+      where: {
+        ...params,
+      },
+    })
+
+    return { books, count }
   }
 
   async findById(id: string) {

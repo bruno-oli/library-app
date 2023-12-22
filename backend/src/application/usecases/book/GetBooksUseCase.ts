@@ -18,19 +18,19 @@ class GetBooksUseCase {
     skip: number = 0,
   ) {
     try {
-      const books = await this.bookRepository.findAll(
+      const { books, count } = (await this.bookRepository.findAll(
         params,
         orderBy,
         order,
         take,
         skip,
-      )
+      )) as { books: Book[]; count: number }
 
       if (!books || !books.length) {
         throw new CustomError('Any book was found', 404)
       }
 
-      return { books }
+      return { books, count }
     } catch (error) {
       if (error instanceof CustomError) {
         throw error

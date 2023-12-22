@@ -10,7 +10,7 @@ export interface BookRepository {
     order?: 'asc' | 'desc',
     take?: number,
     skip?: number,
-  ): Promise<Book[] | null>
+  ): Promise<{ books: Book[]; count: number } | null>
   findById(id: string): Promise<Book | null>
   update(id: string, book: Partial<BookDTO>): Promise<void>
   delete(id: string): Promise<void>

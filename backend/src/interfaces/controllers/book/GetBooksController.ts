@@ -44,7 +44,7 @@ class GetBooksController {
     }
 
     try {
-      const { books } = await this.getBooksUseCase.execute(
+      const { books, count } = await this.getBooksUseCase.execute(
         validateQuery.data.query,
         validateQuery.data.orderBy,
         validateQuery.data.order,
@@ -52,7 +52,7 @@ class GetBooksController {
         validateQuery.data.skip,
       )
 
-      return res.status(200).json(books)
+      return res.status(200).json({ books, count })
     } catch (error) {
       if (error instanceof CustomError) {
         return res.status(error.statusCode).json({
