@@ -15,7 +15,7 @@ const deleteBookUseCase = new DeleteBookUseCase(bookDatabaseRepository)
 const deleteBookController = new DeleteBookController(deleteBookUseCase)
 
 deleteBookRoute.delete(
-  '/books/:id',
+  '/book/:id',
   authAdminMiddleware.handle,
   deleteBookController.handle,
 )
