@@ -1,4 +1,4 @@
-import { UserAuthContext } from '@/context/UserAuthContext'
+import { UserAuthContext } from '@/context/user-auth-context'
 import { useContext, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 
@@ -11,6 +11,7 @@ const ProtectedUserRoutes = () => {
     }
 
     loadUser()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (isAuthLoading) {

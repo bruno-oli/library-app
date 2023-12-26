@@ -1,5 +1,6 @@
 import { api } from '@/api/api'
 import { useToast } from '@/components/ui/use-toast'
+import { IRegister } from '@/schemas/register.schema'
 import { AxiosError } from 'axios'
 import { createContext, useState } from 'react'
 import { useNavigate } from 'react-router'
@@ -11,7 +12,7 @@ interface IUserAuthContext {
   isAuthLoading: boolean
   setIsAuthLoading: (loading: boolean) => void
   loginUser(email: string, password: string): Promise<void>
-  registerUser(credentials: IUserRegister): Promise<void>
+  registerUser(credentials: IRegister): Promise<void>
   authUser(token: string): Promise<void>
 }
 
@@ -33,7 +34,7 @@ const UserAuthContextProvider = ({
 
   async function loginUser(email: string, password: string) {
     try {
-      const response = await api.post<IUserLoginResponse>('/login', {
+      const response = await api.post<IUserLoginResponse>('/user/login', {
         email,
         password,
       })
@@ -59,9 +60,9 @@ const UserAuthContextProvider = ({
     }
   }
 
-  async function registerUser(credentials: IUserRegister) {
+  async function registerUser(credentials: IRegister) {
     try {
-      await api.post<IUser>('/user', credentials)
+      await api.post<IUser>('/user/register', credentials)
 
       toast({
         title: 'Conta criada com sucesso',
@@ -88,12 +89,6 @@ const UserAuthContextProvider = ({
 
       setUser(response.data)
     } catch (error) {
-      toast({
-        title: 'Erro ao validar sessão',
-        description: 'Realize login novamente',
-        variant: 'destructive',
-      })
-
       navigate('/login')
     } finally {
       setIsAuthLoading(false)
