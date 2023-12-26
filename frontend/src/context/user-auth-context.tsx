@@ -3,7 +3,7 @@ import { useToast } from '@/components/ui/use-toast'
 import { IRegister } from '@/schemas/register.schema'
 import { AxiosError } from 'axios'
 import { createContext, useCallback, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate, useLocation } from 'react-router'
 
 interface IUserAuthContext {
   user: IUser | null
@@ -14,6 +14,7 @@ interface IUserAuthContext {
   loginUser(email: string, password: string): Promise<void>
   registerUser(credentials: IRegister): Promise<void>
   authUser(token: string): Promise<void>
+  logoutUser(): void
 }
 
 interface IUserAuthContextProviderProps {
@@ -31,6 +32,8 @@ const UserAuthContextProvider = ({
 
   const navigate = useNavigate()
   const { toast } = useToast()
+
+  const location = useLocation()
 
   const authUser = useCallback(
     async (token: string) => {
@@ -110,6 +113,12 @@ const UserAuthContextProvider = ({
     }
   }
 
+  function logoutUser() {
+    setUser(null)
+    localStorage.removeItem('userToken')
+    navigate(location.pathname, { replace: true })
+  }
+
   return (
     <UserAuthContext.Provider
       value={{
@@ -121,6 +130,7 @@ const UserAuthContextProvider = ({
         loginUser,
         registerUser,
         authUser,
+        logoutUser,
       }}
     >
       {children}
