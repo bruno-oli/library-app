@@ -2,7 +2,7 @@ import { api } from '@/api/api'
 import { useToast } from '@/components/ui/use-toast'
 import { IRegister } from '@/schemas/register.schema'
 import { AxiosError } from 'axios'
-import { createContext, useState } from 'react'
+import { createContext, useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 interface IUserAuthContext {
@@ -31,6 +31,35 @@ const UserAuthContextProvider = ({
 
   const navigate = useNavigate()
   const { toast } = useToast()
+
+  const authUser = useCallback(
+    async (token: string) => {
+      try {
+        const response = await api.post<IUser>('/user/auth', {
+          token,
+        })
+
+        setUser(response.data)
+      } catch (error) {
+        navigate('/login')
+      } finally {
+        setIsAuthLoading(false)
+      }
+    },
+    [navigate],
+  )
+
+  useEffect(() => {
+    async function loadUser() {
+      const token = localStorage.getItem('userToken')
+
+      if (token) {
+        await authUser(token)
+      }
+    }
+
+    loadUser()
+  }, [authUser])
 
   async function loginUser(email: string, password: string) {
     try {
@@ -78,20 +107,6 @@ const UserAuthContextProvider = ({
         description: customError.response?.data.error,
         variant: 'destructive',
       })
-    }
-  }
-
-  async function authUser(token: string) {
-    try {
-      const response = await api.post<IUser>('/user/auth', {
-        token,
-      })
-
-      setUser(response.data)
-    } catch (error) {
-      navigate('/login')
-    } finally {
-      setIsAuthLoading(false)
     }
   }
 
