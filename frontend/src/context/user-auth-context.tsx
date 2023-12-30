@@ -115,7 +115,7 @@ const UserAuthContextProvider = ({
 
   function logoutUser() {
     setUser(null)
-    localStorage.removeItem('userToken')
+    localStorage.clear()
     navigate(location.pathname, { replace: true })
   }
 
